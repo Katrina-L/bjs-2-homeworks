@@ -6,15 +6,6 @@ class PrintEditionItem {
     this.pagesCount = pagesCount;
     this.state = 100;
     this.type = null;
-
-    this.fix = function() {
-      (this.state * 1.5 < 100) ? this.state *= 1.5 : this.state = 100;
-      // if (this.state * 1.5 < 100) {
-      //     this.state *= 1.5;
-      //     return;
-      // }
-      // this.state = 100;
-    }
   }
   
   set state (assessment) {
@@ -29,6 +20,10 @@ class PrintEditionItem {
   
   get state() {
     return this._state;
+  }
+
+  fix() {
+    this.state *= 1.5;
   }
 }
 
@@ -79,19 +74,24 @@ class Library {
       this.books.push(book);
     }
   }
-  
+
   findBookBy(type, value) {
-    for (let i = 0; i < this.books.length; i++) {
-      for (let property in this.books[i]) {
-        if ( property === type && this.books[i][property] === value ) {
-        // if ( property === type && this.books[i][property].includes(value) ) {
-        // if ( property === type && ( this.books[i][property] === value || this.books[i][property].includes(value)) ) {
-          return this.books[i];
-        }
-      }
-    }
-    return null;
+    const book = this.books.find( (book) => book[type] === value );
+    return book || null;
   }
+  
+  // findBookBy(type, value) {
+  //   for (let i = 0; i < this.books.length; i++) {
+  //     for (let property in this.books[i]) {
+  //       if ( property === type && this.books[i][property] === value ) {
+  //       // if ( property === type && this.books[i][property].includes(value) ) {
+  //       // if ( property === type && ( this.books[i][property] === value || this.books[i][property].includes(value)) ) {
+  //         return this.books[i];
+  //       }
+  //     }
+  //   }
+  //   return null;
+  // }
 
   findBookByPart(type, value) {
     for (let i = 0; i < this.books.length; i++) {
@@ -105,13 +105,14 @@ class Library {
   }
 
   giveBookByName(bookName) {
-    for (let i = 0; i < this.books.length; i++) {
-      if (this.books[i].name === bookName) {
-      return console.log(this.books.splice(i, 1));
-      }
-    }
-    return null;
+    const indexBook = this.books.indexOf( this.findBookBy("name", bookName) );
+    return (indexBook !== -1) ? this.books.splice(indexBook, 1)[0] : null;
   }
+
+  // giveBookByName(bookName) {
+  //   const indexBook = this.books.findIndex( (book) => book.name === bookName );
+  //   return ( indexBook !== -1 ) ? this.books.splice(indexBook, 1)[0] : null;
+  // }
 }
 
 //  Задача #3
